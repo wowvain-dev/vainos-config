@@ -1,17 +1,17 @@
 { config, pkgs, ... }:
 let 
-    home-manager = builtins.fetchTarball {
-        url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-    };
+   home-manager = builtins.fetchTarball {
+       url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+   };
 in
 {
     imports = [
-      (import "${home-manager}/nixos")
+        (import "${home-manager}/nixos")
     ];
 
     home-manager.users.wowvain = {
-      home.stateVersion = "24.05";
-
+    home.stateVersion = "24.05";
+    
       xdg.mimeApps = {
         enable = true;
         defaultApplications = {
@@ -24,12 +24,16 @@ in
       };
 
       home.file = {
-        ".footrc" = {
-          text = ''
-            Hello world!
-          '';
-        };
+        ".zshrc".source         = ./sources/zshrc.zsh;
+        ".Xresources".source    = ./sources/xresources.txt;
+        ".vimrc".source         = ./sources/vimrc.vim;
+        ".config/i3/".source    = ./sources/i3;
+        ".config/i3/".recursive = true;
+
+        #".config/i3/"           = {
+        #    source = ./sources/i3;
+        #    recursive = true;
+        #};
       };
     };
-
 }

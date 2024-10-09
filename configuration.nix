@@ -144,6 +144,7 @@ in {
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
     vim
+    curl
     wget
     git 
     emacs
@@ -162,6 +163,8 @@ in {
     ungoogled-chromium
     shutter
     feh
+    vscode
+    home-manager
   ];
 
   services.udev.packages = [
