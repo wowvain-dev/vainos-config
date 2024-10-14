@@ -1,0 +1,5 @@
+shell = "zsh"
+
+[window]
+padding.x = 10
+padding.y = 10

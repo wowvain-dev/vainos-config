@@ -8,6 +8,9 @@ in
     imports = [
         (import "${home-manager}/nixos")
     ];
+  
+
+    home-manager.backupFileExtension = "bkp";
 
     home-manager.users.wowvain = {
     home.stateVersion = "24.05";
@@ -24,16 +27,46 @@ in
       };
 
       home.file = {
-        ".zshrc".source         = ./sources/zshrc.zsh;
-        ".Xresources".source    = ./sources/xresources.txt;
-        ".vimrc".source         = ./sources/vimrc.vim;
-        ".config/i3/".source    = ./sources/i3;
-        ".config/i3/".recursive = true;
+        # shells
+        ".zshrc".source           = ./sources/zshrc.zsh;
 
-        #".config/i3/"           = {
-        #    source = ./sources/i3;
-        #    recursive = true;
-        #};
+        # dpi config for xorg
+        ".Xresources".source      = ./sources/xresources.txt;
+
+        # editors
+        ".vimrc".source           = ./sources/vimrc.vim;
+
+        # terminals
+        ".config/alacritty/"      = { 
+            source = ./sources/alacritty;
+            recursive = true;
+        };
+        ".config/kitty/"          = {
+            source = ./sources/kitty;
+            recursive = true;
+        };
+
+        # neofetch
+        ".config/neofetch/"       = {
+            source = ./sources/neofetch;
+            recursive = true;
+        };
+
+        # wms 
+        ".config/i3/"             = {
+            source = ./sources/i3;
+            recursive = true;
+        };
+        ".config/hypr"            = {
+            source = ./sources/hypr;
+            recursive = true;
+        };
+
+        # fonts
+        ".local/share/fonts/"     = {
+            source = ./fonts;
+            recursive = true;
+        }; 
       };
     };
 }

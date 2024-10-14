@@ -20,20 +20,28 @@ in {
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  systemd.enableEmergencyMode = false;
+
+  boot.supportedFilesystems = [ "ntfs" ];
+
+  nix.settings.auto-optimise-store = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than +5";
+
   boot.lanzaboote = {
     enable = true;
     pkiBundle = "/etc/secureboot";
   };
 
   security.sudo.enable = true;
-
+	
   users.users.wowvain = {
     isNormalUser = true;
     home = "/home/wowvain";
     description = "wowvain";
     extraGroups = [ "wheel" "networkmanager" ];
   };
-
   networking.hostName = "vain-laptop"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -57,7 +65,9 @@ in {
   # };
 
   # Enable the X11 windowing system.
-  services.displayManager.defaultSession = "none+i3";
+  services.displayManager.defaultSession = "hyprland";
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.wayland = true;
   services.xserver = {
     enable = true;
     videoDrivers = [ "nvidia" ];
@@ -74,28 +84,47 @@ in {
       ];
     };
   };
+  
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
+  environment.sessionVariables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+    NIXOS_OZONE_WL = "1";
+  };
 
   hardware = {
     graphics.enable = true;
     nvidia.open = true;
     nvidia.modesetting.enable = true;
+
+    nvidia.powerManagement.enable = false;
+    nvidia.powerManagement.finegrained = false;
+    nvidia.nvidiaSettings = true;
   };
 
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # services.xserver.desktopManager.plasma5.enable = true;
 
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
   # Enable sound.
-  hardware.pulseaudio.enable = true;
-  services.pipewire.enable = false;
-  services.pipewire.pulse.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
   # OR
   # services.pipewire = {
   #   enable = true;
@@ -104,16 +133,6 @@ in {
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     firefox
-  #     tree
-  #   ];
-  # };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -141,8 +160,27 @@ in {
 
   system.stateVersion = "24.05"; # Did you read the comment?
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  environment.variables.EDITOR = "vim";
+
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
+    waybar
+    eww
+    mako
+    libnotify
+    networkmanagerapplet
+
+    swww
+
+    # rofi-wayland
+
+    kitty
+
     vim
     curl
     wget
@@ -164,7 +202,51 @@ in {
     shutter
     feh
     vscode
-    home-manager
+    obs-studio
+    vlc
+    gnome.cheese
+    hyprshot
+    kdePackages.partitionmanager
+    parted
+    imagemagick
+
+    (pkgs.waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+    }))
+
+
+    bison
+    gdb
+    flex 
+    fontforge
+    makeWrapper
+    pkg-config
+    gnumake
+    gcc
+    libiconv
+    autoconf
+    automake
+    libtool
+
+    ferdium
+
+
+    yazi
+
+    wofi 
+
+    python3
+  ];
+
+  services.flatpak.enable = true;
+
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    fira-code
+    fira-code-symbols
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
   ];
 
   services.udev.packages = [
