@@ -90,6 +90,8 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR='vim'
 
+export VAINOS="$HOME/.vainos"
+
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
@@ -105,5 +107,5 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="eza -a -l --git --hyperlink"
-alias vim="VIMRC=/home/wowvain/.vimrc vim"
-alias vainos-reload="sudo nixos-rebuild switch -I nixos-config=/home/wowvain/.nixos/configuration.nix"
+alias vim="VIMRC=$HOME/.vimrc vim"
+alias vainos-reload="sudo nixos-rebuild switch -I nixos-config=$VAINOS/configuration.nix"

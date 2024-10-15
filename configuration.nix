@@ -147,17 +147,6 @@ in {
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
   system.stateVersion = "24.05"; # Did you read the comment?
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -196,7 +185,7 @@ in {
     sbctl
     niv
     thunderbird
-    xfce.thunar
+    nautilus
     neofetch
     ungoogled-chromium
     shutter
@@ -204,7 +193,7 @@ in {
     vscode
     obs-studio
     vlc
-    gnome.cheese
+    cheese
     hyprshot
     kdePackages.partitionmanager
     parted
@@ -246,7 +235,7 @@ in {
     noto-fonts-emoji
     fira-code
     fira-code-symbols
-    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "Iosevka" "IosevkaTerm"]; })
   ];
 
   services.udev.packages = [

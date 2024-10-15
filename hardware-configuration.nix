@@ -23,6 +23,21 @@
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
+  fileSystems."/home/wowvain/disks/misc" = 
+    { device = "/dev/disk/by-uuid/0EF110360EF11036";
+      fsType = "ntfs-3g";
+      options = [ "rw" "uid=1000"];
+    };
+  fileSystems."/home/wowvain/disks/media" = 
+    { device = "/dev/disk/by-uuid/0EF10FEE0EF10FEE";
+      fsType = "ntfs-3g";
+      options = [ "rw" "uid=1000"];
+    };
+  fileSystems."/home/wowvain/disks/dev" = 
+    { device = "/dev/disk/by-uuid/0EF10F9E0EF10F9E";
+      fsType = "ntfs-3g";
+      options = [ "rw" "uid=1000"];
+    };
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/b4d6c3ec-2f42-4361-bdef-3b23176ae8a8"; }

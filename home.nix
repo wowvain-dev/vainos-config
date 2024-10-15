@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 let 
-   home-manager = builtins.fetchTarball {
-       url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-   };
+    home-manager = builtins.fetchTarball {
+      url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+    };
 in
 {
     imports = [
@@ -46,12 +46,19 @@ in
             recursive = true;
         };
 
-        # neofetch
         ".config/neofetch/"       = {
             source = ./sources/neofetch;
             recursive = true;
         };
-
+        ".config/wofi/"           = {
+            source = ./sources/wofi;
+            recursive = true;
+        };
+        ".config/yazi/"           = {
+            source = ./sources/yazi;
+            recursive = true;
+        };
+        
         # wms 
         ".config/i3/"             = {
             source = ./sources/i3;
