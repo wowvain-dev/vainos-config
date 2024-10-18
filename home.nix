@@ -1,18 +1,12 @@
-{ config, pkgs, ... }:
-let 
-    home-manager = builtins.fetchTarball {
-      url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-    };
-in
+{ config, pkgs, systemSettings, userSettings, inputs, ... }:
 {
-    imports = [
-        (import "${home-manager}/nixos")
-    ];
-  
+		home.username = userSettings.username;
+		home.homeDirectory = userSettings.homeDir;
 
-    home-manager.backupFileExtension = "bkp";
-
-    home-manager.users.wowvain = {
+		programs.home-manager.enable = true;
+		
+    # home-manager.backupFileExtension = "bkp";
+		#home.backupFileExtension = "bkp";
     home.stateVersion = "24.05";
     
       xdg.mimeApps = {
@@ -29,51 +23,28 @@ in
       home.file = {
         # shells
         ".zshrc".source           = ./sources/zshrc.zsh;
-
         # dpi config for xorg
         ".Xresources".source      = ./sources/xresources.txt;
-
         # editors
         ".vimrc".source           = ./sources/vimrc.vim;
-
         # terminals
-        ".config/alacritty/"      = { 
-            source = ./sources/alacritty;
-            recursive = true;
-        };
-        ".config/kitty/"          = {
-            source = ./sources/kitty;
-            recursive = true;
-        };
-
-        ".config/neofetch/"       = {
-            source = ./sources/neofetch;
-            recursive = true;
-        };
-        ".config/wofi/"           = {
-            source = ./sources/wofi;
-            recursive = true;
-        };
-        ".config/yazi/"           = {
-            source = ./sources/yazi;
-            recursive = true;
-        };
-        
+        ".config/alacritty/"      = { source = ./sources/alacritty; recursive = true; };
+        ".config/kitty/"          = { source = ./sources/kitty; recursive = true; };
+        ".config/neofetch/"       = { source = ./sources/neofetch; recursive = true; };
+        ".config/wofi/"           = { source = ./sources/wofi; recursive = true; };
+        ".config/yazi/"           = { source = ./sources/yazi; recursive = true; };
+        ".config/mako/"           = { source = ./sources/mako; recursive = true; };
+        ".config/waybar/"         = { source = ./sources/waybar; recursive = true; };
         # wms 
-        ".config/i3/"             = {
-            source = ./sources/i3;
-            recursive = true;
-        };
-        ".config/hypr"            = {
-            source = ./sources/hypr;
-            recursive = true;
-        };
-
+        ".config/i3/"             = { source = ./sources/i3; recursive = true; };
+        ".config/hypr"            = { source = ./sources/hypr; recursive = true; };
         # fonts
-        ".local/share/fonts/"     = {
-            source = ./fonts;
-            recursive = true;
-        }; 
+        ".local/share/fonts/"     = { source = ./fonts; recursive = true; }; 
       };
-    };
+
+		home.sessionVariables = {
+			EDITOR = userSettings.editor;
+			BROWSER = userSettings.browser;
+			TERM = userSettings.term;
+		};
 }

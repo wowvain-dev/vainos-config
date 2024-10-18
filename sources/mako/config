@@ -1,0 +1,34 @@
+font=IosevkaTermNF 11
+format=<b>%a ⏵</b> %s\n%b
+sort=-time
+layer=overlay
+anchor=top-right
+background-color=#1c1e22
+width=350
+height=150
+margin=20
+padding=20
+border-size=2
+border-color=#687ec1
+border-radius=12
+icons=0
+max-icon-size=64
+default-timeout=5000
+ignore-timeout=1
+
+[urgency=normal]
+border-color=#687ec1
+
+
+[urgency=high]
+border-color=#bf616a
+default-timeout=0
+
+[app-name=lightcord]
+border-color=#88c0d0
+
+[summary~="log-.*"]
+border-color=#a3be8c
+
+[app-name=lightcord summary~="(.*(^| )orz|ORZ|sto|STO|otl|OTL( |$).*)"]
+invisible=1

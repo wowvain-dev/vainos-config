@@ -92,6 +92,12 @@ export EDITOR='vim'
 
 export VAINOS="$HOME/.vainos"
 
+export LD_LIBRARY_PATH=/run/current-system/sw/lib:$LD_LIBRARY_PATH
+
+export HYPRSHOT_DIR="$HOME/disks/media/Pics/screenshots/"
+
+export HM_TEST="TRUE"
+
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 

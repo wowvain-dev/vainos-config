@@ -2,72 +2,74 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, systemSettings, userSettings,  pkgs, inputs, ... }:
 let 
 	sources = import ./nix/sources.nix;
 	lanzaboote = import sources.lanzaboote;
-in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix ./home.nix
-      lanzaboote.nixosModules.lanzaboote
-    ];
+in 
+{
+
+  #imports =
+  #  [ # Include the results of the hardware scan.
+  #    ./hardware-configuration.nix 
+  #			./home.nix
+#      lanzaboote.nixosModules.lanzaboote
+  #  ];
+	imports = [
+		./hardware-configuration.nix
+		lanzaboote.nixosModules.lanzaboote
+	];
 
 
   nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = lib.mkForce false;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  systemd.enableEmergencyMode = false;
-
   boot.supportedFilesystems = [ "ntfs" ];
-
-  nix.settings.auto-optimise-store = true;
-  nix.gc.automatic = true;
-  nix.gc.dates = "daily";
-  nix.gc.options = "--delete-older-than +5";
+	#boot.loader.systemd-boot.enable = if (systemSettings.bootMode == "uefi") then true else false;
+  #boot.loader.efi.canTouchEfiVariables = if (systemSettings.bootMode == "uefi") then true else false;
+  #boot.loader.efi.efiSysMountPoint = systemSettings.bootMountPath; 
+	boot.loader.systemd-boot.enable = lib.mkForce false;
+	boot.loader.efi.canTouchEfiVariables = true;
+  systemd.enableEmergencyMode = false;
 
   boot.lanzaboote = {
     enable = true;
     pkiBundle = "/etc/secureboot";
   };
 
-  security.sudo.enable = true;
-	
-  users.users.wowvain = {
-    isNormalUser = true;
-    home = "/home/wowvain";
-    description = "wowvain";
-    extraGroups = [ "wheel" "networkmanager" ];
-  };
-  networking.hostName = "vain-laptop"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-
-  networking.networkmanager.enable = true;
+	networking.hostName = systemSettings.hostname;
+	networking.networkmanager.enable = true;
 
   # Set your time zone.
-  time.timeZone = "Europe/Amsterdam";
+  time.timeZone = systemSettings.timezone;
+	
+  security.sudo.enable = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+	users.users.${userSettings.username} = {
+		isNormalUser = true;
+		home = userSettings.homeDir;
+		description = userSettings.name;
+		extraGroups = [ "networkmanager" "wheel" "input" "dialout" "video" "render" ];
+		packages = [];
+		uid = 1000;
+	};
 
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
+
+  #nix.settings.auto-optimise-store = true;
+  #nix.gc.automatic = true;
+  #nix.gc.dates = "daily";
+  #nix.gc.options = "--delete-older-than +5";
+  #users.users.wowvain = {
+    #isNormalUser = true;
+    #home = "/home/wowvain";
+    #description = "wowvain";
+    #extraGroups = [ "wheel" "networkmanager" "input" ];
+  #};
 
   # Enable the X11 windowing system.
-  services.displayManager.defaultSession = "hyprland";
+  services.displayManager.defaultSession = if (userSettings.wm == "hyprland") then "hyprland" else "i3+none";
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
+  services.xserver.displayManager.gdm.wayland = if (userSettings.wmType == "wayland") then true else false;
   services.xserver = {
     enable = true;
     videoDrivers = [ "nvidia" ];
@@ -107,7 +109,10 @@ in {
   };
 
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.extraPortals = [ 
+		pkgs.xdg-desktop-portal
+		pkgs.xdg-desktop-portal-gtk 
+	];
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
@@ -179,6 +184,9 @@ in {
     discord
     alacritty
     alacritty-theme
+    ferdium
+    yazi
+    wofi 
     zsh
     eza
     pavucontrol
@@ -199,32 +207,38 @@ in {
     parted
     imagemagick
 
+    alsa-utils
+		home-manager
+
     (pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     }))
 
 
-    bison
     gdb
-    flex 
-    fontforge
-    makeWrapper
-    pkg-config
-    gnumake
     gcc
+    flex 
+    nasm
+    bison
+    libtool
+    gnumake
     libiconv
     autoconf
     automake
-    libtool
-
-    ferdium
-
-
-    yazi
-
-    wofi 
+    fontforge
+    pkg-config
+    makeWrapper
 
     python3
+    paleta
+    bfc
+    libreoffice
+    
+    fbset
+
+    ncurses
+
+		webcord
   ];
 
   services.flatpak.enable = true;
