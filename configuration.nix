@@ -167,71 +167,15 @@ in
 		wpa_supplicant
 	
     waybar
-    eww
-    mako
-    libnotify
-    networkmanagerapplet
-    swww
-    emacs
-    firefox
-    discord
-    alacritty
-    alacritty-theme
-    ferdium
-    yazi
-    wofi 
-    eza
-    pavucontrol
-    sbctl
-    niv
-    thunderbird
-    gnome.nautilus
-    neofetch
-    ungoogled-chromium
-    shutter
-    feh
-    vscode
-    obs-studio
-    vlc
-    gnome.cheese
-    hyprshot
-    kdePackages.partitionmanager
-    parted
-    imagemagick
-
-    alsa-utils
-		home-manager
 
     (pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     }))
-
-
-    gdb
-    gcc
-    flex 
-    nasm
-    bison
-    libtool
-    gnumake
-    libiconv
-    autoconf
-    automake
-    fontforge
-    pkg-config
-    makeWrapper
-
-    python3
-    paleta
-    bfc
-    libreoffice
-    
-    fbset
-
-    ncurses
   ];
 
   services.flatpak.enable = true;
+
+	fonts.fontDir.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
