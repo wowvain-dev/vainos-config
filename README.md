@@ -9,4 +9,5 @@ Still learning Nix and NixOS myself but my goal is to eventually make this modul
 - Bar: Waybar, soon will change to custom Fabric-py bar
 
 #### Notes
-- The config is currently done using only `configuration.nix` and home-manager, but I am planning to switch to flakes soon.
+- The configuration now uses flakes. 
+- I am planning to give a proper folder structure to the configuration and make it more modular.
