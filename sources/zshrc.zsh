@@ -98,6 +98,8 @@ export HYPRSHOT_DIR="$HOME/disks/media/Pics/screenshots/"
 
 export HM_TEST="TRUE"
 
+export OBSIDIAN_DISABLE_GPU=1
+
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
@@ -114,4 +116,5 @@ export HM_TEST="TRUE"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="eza -a -l --git --hyperlink"
 alias vim="VIMRC=$HOME/.vimrc vim"
-alias vainos-reload="sudo nixos-rebuild switch -I nixos-config=$VAINOS/configuration.nix"
+alias vainos-reload="sudo nixos-rebuild switch --flake $VAINOS --impure"
+alias user-reload="home-manager switch --flake $VAINOS"

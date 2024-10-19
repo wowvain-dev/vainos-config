@@ -2,24 +2,27 @@
   description = "Flake of VainOS";
 
 		inputs = {
-			nixpkgs.url = "nixpkgs/nixos-unstable";
+			nixpkgs.url = "nixpkgs/nixos-24.05";
+			nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+			home-manager.url = "github:nix-community/home-manager/release-24.05";
+			home-manager.inputs.nixpkgs.follows = "nixpkgs";
 			home-manager-unstable.url = "github:nix-community/home-manager/master";
 			home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs";
 
-			hyprland = {
-				type = "git";
-				url = "https://code.hyprland.org/hyprwm/Hyprland.git";
-				submodules = true;
-				rev = "0f594732b063a90d44df8c5d402d658f27471dfe";	
-				inputs.nixpkgs.follows = "nixpkgs";
-			};
+			#hyprland = {
+			#	type = "git";
+			#	url = "https://code.hyprland.org/hyprwm/Hyprland.git";
+			#	submodules = true;
+			#	rev = "0f594732b063a90d44df8c5d402d658f27471dfe";	
+			#	inputs.nixpkgs.follows = "nixpkgs";
+			#};
 
-			hyprland-plugins = {
-				type = "git";
-				url = "https://code.hyprland.org/hyprwm/hyprland-plugins.git";
-				rev = "b73d7b901d8cb1172dd25c7b7159f0242c625a77"; #v0.43.0
-				inputs.hyprland.follows = "hyprland";
-			};
+			#hyprland-plugins = {
+			#	type = "git";
+			#	url = "https://code.hyprland.org/hyprwm/hyprland-plugins.git";
+			#	rev = "b73d7b901d8cb1172dd25c7b7159f0242c625a77"; #v0.43.0
+			#	inputs.hyprland.follows = "hyprland";
+			#};
 
 			hyprlock = {
 				type = "git";
@@ -72,7 +75,7 @@
 			pkgs = nixpkgs-patched;
 			lib = inputs.nixpkgs.lib;
 		
-			home-manager = inputs.home-manager-unstable;
+			home-manager = inputs.home-manager;
 
 			supportedSystems = [ "x86_64-linux" ];
 

@@ -54,25 +54,13 @@ in
 		uid = 1000;
 	};
 
-
-  #nix.settings.auto-optimise-store = true;
-  #nix.gc.automatic = true;
-  #nix.gc.dates = "daily";
-  #nix.gc.options = "--delete-older-than +5";
-  #users.users.wowvain = {
-    #isNormalUser = true;
-    #home = "/home/wowvain";
-    #description = "wowvain";
-    #extraGroups = [ "wheel" "networkmanager" "input" ];
-  #};
-
   # Enable the X11 windowing system.
   services.displayManager.defaultSession = if (userSettings.wm == "hyprland") then "hyprland" else "i3+none";
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = if (userSettings.wmType == "wayland") then true else false;
   services.xserver = {
     enable = true;
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "nvidia" "modesetting" ];
     desktopManager = {
       xterm.enable = false;
     };
@@ -99,13 +87,17 @@ in
   };
 
   hardware = {
-    graphics.enable = true;
-    nvidia.open = true;
-    nvidia.modesetting.enable = true;
+    opengl.enable = true;
 
-    nvidia.powerManagement.enable = false;
-    nvidia.powerManagement.finegrained = false;
-    nvidia.nvidiaSettings = true;
+		nvidia = {
+			nvidiaSettings = true;
+			open = true;
+			modesetting.enable = true;
+		};
+    #nvidia.open = true;
+    #nvidia.modesetting.enable = true;
+		#nvidia.nvidiaPersistenced = true;
+    #nvidia.powerManagement.enable = true;
   };
 
   xdg.portal.enable = true;
@@ -163,22 +155,23 @@ in
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
+		# core
+		vim
+		wget
+		curl
+		zsh
+		git
+		kitty
+		cryptsetup
+		home-manager
+		wpa_supplicant
+	
     waybar
     eww
     mako
     libnotify
     networkmanagerapplet
-
     swww
-
-    # rofi-wayland
-
-    kitty
-
-    vim
-    curl
-    wget
-    git 
     emacs
     firefox
     discord
@@ -187,13 +180,12 @@ in
     ferdium
     yazi
     wofi 
-    zsh
     eza
     pavucontrol
     sbctl
     niv
     thunderbird
-    nautilus
+    gnome.nautilus
     neofetch
     ungoogled-chromium
     shutter
@@ -201,7 +193,7 @@ in
     vscode
     obs-studio
     vlc
-    cheese
+    gnome.cheese
     hyprshot
     kdePackages.partitionmanager
     parted
@@ -237,8 +229,6 @@ in
     fbset
 
     ncurses
-
-		webcord
   ];
 
   services.flatpak.enable = true;
