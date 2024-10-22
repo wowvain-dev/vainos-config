@@ -57,6 +57,7 @@
 			# Core
 			zsh
 			kitty
+			alacritty
 			git
 			syncthing
 
@@ -64,10 +65,13 @@
 			feh
 			eza
 			yazi
+			z-lua
+			ffmpeg
 			hyprshot
 			libnotify
 			fontforge
 			alsa-utils
+			pavucontrol
 			gnome.nautilus
 			networkmanagerapplet
 	
@@ -84,6 +88,7 @@
 
 			# Browsers
 			firefox
+			ungoogled-chromium
 
 			# Office
 			obsidian
@@ -93,6 +98,7 @@
 
 			# Media
 			vlc
+			kooha
 			shutter
 			obs-studio
 			gnome.cheese
