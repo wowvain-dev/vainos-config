@@ -27,6 +27,6 @@
     };
     libinput = {
       touchpad.disableWhileTyping = true;
-    }
+    };
   };
 }

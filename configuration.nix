@@ -3,22 +3,12 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, systemSettings, userSettings,  pkgs, pkgs-unstable, inputs, ... }:
-let 
-	sources = import ./nix/sources.nix;
-	lanzaboote = import sources.lanzaboote;
-in 
 {
-
-  #imports =
-  #  [ # Include the results of the hardware scan.
-  #    ./hardware-configuration.nix 
-  #			./home.nix
-#      lanzaboote.nixosModules.lanzaboote
-  #  ];
 	imports = [
+    # Generated hardware config
 		./hardware-configuration.nix
-		lanzaboote.nixosModules.lanzaboote
 
+    # Core system configuration
     ./system/hardware/systemd.nix
     ./system/hardware/kernel.nix
     ./system/hardware/power.nix
@@ -27,19 +17,28 @@ in
     ./system/hardware/graphics.nix
     ./system/hardware/udev.nix
 
-    (./. + "../../../system/wm" + ("/" + userSettings.wm) + ".nix") # Import the correct WM
+    # WM / DE
+    (./. + "/system/wm" + ("/" + userSettings.wm) + ".nix") # Import the correct WM
 
 	];
 
 
-	boot.kernelPackages = pkgs-unstable.linuxPackages;
+	#boot.kernelPackages = pkgs-unstable.linuxPackages;
 
   nixpkgs.config.allowUnfree = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.supportedFilesystems = [ "ntfs" ];
 	boot.loader.systemd-boot.enable = lib.mkForce false;
 	boot.loader.efi.canTouchEfiVariables = true;
+  
+	boot.loader.grub.configurationLimit = 10;
   systemd.enableEmergencyMode = false;
 
   boot.lanzaboote = {
@@ -106,11 +105,11 @@ in
 	# 	};
   # };
 
-  # xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [ 
-	# 	pkgs.xdg-desktop-portal
-	# 	pkgs.xdg-desktop-portal-gtk 
-	# ];
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ 
+	 	pkgs.xdg-desktop-portal
+	 	pkgs.xdg-desktop-portal-gtk 
+	];
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -136,12 +135,17 @@ in
 		curl
 		zsh
 		git
+
+    sbctl
+
 		kitty
     direnv
 		cryptsetup
 		home-manager
 		wpa_supplicant
-	
+
+    pkgs-unstable.libinput
+
     waybar
 
     (pkgs.waybar.overrideAttrs (oldAttrs: {
@@ -152,37 +156,5 @@ in
   services.flatpak.enable = true;
 
 	fonts.fontDir.enable = true;
-
-  # fonts.packages = with pkgs; [
-  #   noto-fonts
-  #   noto-fonts-cjk
-  #   noto-fonts-emoji
-  #   fira-code
-  #   fira-code-symbols
-  #   (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" "Iosevka" "IosevkaTerm"]; })
-  # ];
-
-  # services.udev.packages = [
-  #   (pkgs.writeTextFile {
-  #     name = "wootility_udev";
-  #     text = ''
-  #       # Wooting One Legacy
-  #       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="ff01", TAG+="uaccess"
-  #       SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="ff01", TAG+="uaccess"
-  #       # Wooting One update mode
-  #       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess"
-  #       # Wooting Two Legacy
-  #       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="ff02", TAG+="uaccess"
-  #       SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="ff02", TAG+="uaccess"
-  #       # Wooting Two update mode
-  #       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2403", TAG+="uaccess"
-  #       # Generic Wootings
-  #       SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", TAG+="uaccess"
-  #       SUBSYSTEM=="usb", ATTRS{idVendor}=="31e3", TAG+="uaccess" 
-  #     '';
-  #     destination = "/etc/udev/rules.d/70-wooting.rules";
-  #   })
-  # ];
-
 }
 

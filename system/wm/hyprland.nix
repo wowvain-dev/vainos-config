@@ -1,6 +1,7 @@
-{ inputs, pkgs, lib, userSettings, ... }:
+{ inputs, pkgs, pkgs-unstable, lib, userSettings, ... }:
 let
   pkgs-hyprland = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  hyprland-patched = inputs.hyprland.packages.${pkgs.system}.hyprland;
 in 
 {
   # Wayland configs
@@ -8,7 +9,7 @@ in
     ./wayland.nix
     ./pipewire.nix
     ./dbus.nix
-  ]
+  ];
 
   # Security
   security = {
@@ -20,7 +21,13 @@ in
   programs = {
     hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      # package = (
+      #   hyprland-patched.overrideAttrs (
+      #     oldAttrs: rec {
+      #       nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs-unstable.libinput ];
+      #     }
+      #   )
+      # );
       xwayland = {
         enable = true;
       };
@@ -30,7 +37,7 @@ in
 
   services.xserver.excludePackages = [ pkgs.xterm ];
 
-  services.displayManager.defaultSession = "hyprland";  
+  #services.displayManager.defaultSession = "hyprland";  
   # the original GDM Vain setup
   services.xserver = {
     displayManager = {
@@ -42,13 +49,13 @@ in
   };
 
   # the untested SDDM setup
-  # services.xserver = {
-  #   displayManager.sddm = {
-  #     enable = true;
-  #     wayland.enable = true;
-  #     enableHidpi = true;
-  #     packages = pkgs.sddm;
-  #     theme = "chili";
-  #   }
-  # };
+   #services = {
+	   #displayManager.sddm = {
+       #enable = true;
+       #wayland.enable = true;
+       #enableHidpi = true;
+       #package = pkgs.sddm;
+	     #theme = "chili";
+     #};
+  #};
 }

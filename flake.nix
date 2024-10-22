@@ -14,6 +14,11 @@
 			home-manager-unstable.url = "github:nix-community/home-manager/master";
 			home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs";
 
+			lanzaboote = {
+				url = "github:nix-community/lanzaboote/v0.4.1";
+				inputs.nixpkgs.follows = "nixpkgs";
+			};
+
 			emacs-pin-nixpkgs.url = "nixpkgs/f72123158996b8d4449de481897d855bc47c7bf6";
 			kdenlive-pin-nixpkgs.url = "nixpkgs/cfec6d9203a461d9d698d8a60ef003cac6d0da94";
     	nwg-dock-hyprland-pin-nixpkgs.url = "nixpkgs/2098d845d76f8a21ae4fe12ed7c7df49098d3f15";
@@ -70,7 +75,7 @@
 		#};
   #};
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... } @ inputs: 
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, lanzaboote, ... } @ inputs: 
 		let 
 			# ---- SYSTEM SETTINGS ----
 			systemSettings = {
@@ -92,6 +97,7 @@
 				wmType = if (wm == "hyprland") then "wayland" else "x11";	
 				browser = "firefox";
 				term = "kitty";
+				shell = "fish";
 				editor = "vim";
 				font = "IosevkaTermNF";
 			};
@@ -133,8 +139,6 @@
 			
 			nixpkgsFor = forAllSystems (system: import inputs.nixpkgs { inherit system; });
 
-			sources = import ./nix/sources.nix;
-			lanzaboote = import sources.lanzaboote;
 		in {
 			homeConfigurations = {
 				${userSettings.username} = home-manager.lib.homeManagerConfiguration {
@@ -158,6 +162,7 @@
 					system = systemSettings.system;
 					modules = [
 						./configuration.nix
+						lanzaboote.nixosModules.lanzaboote
 						inputs.lix-module.nixosModules.default
 					];
 					specialArgs = {

@@ -29,11 +29,12 @@
       layout = "us";
       variant = "";
       options = "eurosign:e,caps:escape";
-    }
-  }
+    };
+  };
 
   environment.sessionVariables = {
+		WLR_DRM_DEVICES = "/dev/dri/card1";
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
-  }
+  };
 }

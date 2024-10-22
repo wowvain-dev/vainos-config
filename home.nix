@@ -4,8 +4,7 @@
 		home.homeDirectory = userSettings.homeDir;
 
 		programs.home-manager.enable = true;
-		
-    # home-manager.backupFileExtension = "bkp";
+		# home-manager.backupFileExtension = "bkp";
 		#home.backupFileExtension = "bkp";
     home.stateVersion = "24.05";
 		    
@@ -73,6 +72,8 @@
 			alsa-utils
 			pavucontrol
 			gnome.nautilus
+			libinput-gestures
+			libva-utils
 			networkmanagerapplet
 	
 			# Rice
@@ -115,6 +116,7 @@
 			gcc
 			gdb
 			niv
+			nil
 			flex
 			nasm
 			sbctl

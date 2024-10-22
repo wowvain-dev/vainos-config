@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 {
-	boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+	boot.kernelPackages = pkgs-unstable.linuxPackages_xanmod_latest;
 	boot.consoleLogLevel = 0;
 }

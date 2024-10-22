@@ -116,5 +116,5 @@ export OBSIDIAN_DISABLE_GPU=1
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="eza -a -l --git --hyperlink"
 alias vim="VIMRC=$HOME/.vimrc vim"
-alias vainos-reload="sudo nixos-rebuild switch --flake $VAINOS --impure"
+alias vainos-reload="sudo nixos-rebuild switch --flake $VAINOS"
 alias user-reload="home-manager switch --flake $VAINOS"
