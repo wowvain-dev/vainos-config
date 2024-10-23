@@ -1,11 +1,15 @@
 { config, pkgs, systemSettings, userSettings, inputs, ... }:
 {
+
 		home.username = userSettings.username;
 		home.homeDirectory = userSettings.homeDir;
 
 		programs.home-manager.enable = true;
-		# home-manager.backupFileExtension = "bkp";
-		#home.backupFileExtension = "bkp";
+
+		imports = [
+			./user/app/nvim/nvim.nix
+		];
+
     home.stateVersion = "24.05";
 		    
     xdg.mimeApps = {
